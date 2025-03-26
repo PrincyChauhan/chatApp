@@ -3,12 +3,7 @@ import Message from "./Message";
 const Messages = () => {
   return (
     <>
-      <div>
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+      <div className="" style={{ minHeight: "calc(88vh - 10vh)" }}>
         <Message />
         <Message />
         <Message />

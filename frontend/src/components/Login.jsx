@@ -15,7 +15,7 @@ const Login = () => {
   } = useForm();
 
   const navigate = useNavigate();
-  const [authUser, setAuthUser] = useAuth(); // Use Auth Context
+  const [authUser, setAuthUser] = useAuth();
 
   const onSubmit = async (data) => {
     const userInfo = {
@@ -24,13 +24,14 @@ const Login = () => {
     };
     // console.log(userInfo);
     await axios
-      .post(`http://localhost:3000/user/login`, userInfo)
+      // .post(`http://localhost:3000/user/login`, userInfo)
+      .post("/api/user/login", userInfo)
       .then((response) => {
         if (response.data) {
           toast.success("Login successful");
         }
         localStorage.setItem("ChatApp", JSON.stringify(response.data));
-        setAuthUser(response.data); // Set authUser after successful login
+        setAuthUser(response.data);
         navigate("/"); // Redirect to home
       })
       .catch((error) => {

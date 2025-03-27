@@ -1,24 +1,49 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-
-const Signup = () => {
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+function Signup() {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
   const password = watch("password", "");
   const confirmPassword = watch("confirmPassword", "");
 
   const validatePasswordMatch = (value) => {
     return value === password || "Passwords do not match";
   };
-  const onSubmit = (data) => console.log(data);
 
+  const onSubmit = async (data) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      confirmpassword: data.confirmpassword,
+    };
+    // console.log(userInfo);
+    await axios
+      .post(`http://localhost:3000/user/signup`, userInfo)
+      .then((response) => {
+        if (response.data) {
+          toast.success("Signup successful");
+        }
+        localStorage.setItem("ChatApp", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        if (error.response) {
+          toast.error("Error: " + error.response.data.error);
+        }
+      });
+  };
   return (
     <>
       <div className="flex h-screen items-center justify-center">
+        <ToastContainer />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="border border-black px-6 py-2 rounded-md space-y-3 w-96"
@@ -41,11 +66,11 @@ const Signup = () => {
             <input
               type="text"
               className="grow"
-              placeholder="User Name"
-              {...register("fullname", { required: true })}
+              placeholder="Username"
+              {...register("name", { required: true })}
             />
           </label>
-          {errors.fullname && (
+          {errors.name && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>
@@ -91,7 +116,7 @@ const Signup = () => {
             <input
               type="password"
               className="grow"
-              placeholder="password"
+              placeholder="Password"
               {...register("password", { required: true })}
             />
           </label>
@@ -118,16 +143,16 @@ const Signup = () => {
             <input
               type="password"
               className="grow"
-              placeholder="confirm password"
-              {...register("confirmPassword", {
+              placeholder="Confirm Password"
+              {...register("confirmpassword", {
                 required: true,
                 validate: validatePasswordMatch,
               })}
             />
           </label>
-          {errors.confirmPassword && (
+          {errors.confirmpassword && (
             <span className="text-red-500 text-sm font-semibold">
-              {errors.confirmPassword.message}
+              {errors.confirmpassword.message}
             </span>
           )}
 
@@ -139,11 +164,20 @@ const Signup = () => {
               className="text-white bg-blue-600 cursor-pointer w-full rounded-lg py-2"
             ></input>
           </div>
-          <p>Have any Account? </p>
+          <p>
+            Have any Account?{" "}
+            <Link
+              to={"/login"}
+              className="text-blue-500 underline cursor-pointer ml-1"
+            >
+              {" "}
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </>
   );
-};
+}
 
 export default Signup;

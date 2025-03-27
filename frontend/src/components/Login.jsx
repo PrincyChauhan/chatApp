@@ -1,9 +1,40 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (data) => {
+    const userInfo = {
+      email: data.email,
+      password: data.password,
+    };
+    // console.log(userInfo);
+    await axios
+      .post(`http://localhost:3000/user/login`, userInfo)
+      .then((response) => {
+        if (response.data) {
+          toast.success("Login successful");
+        }
+        localStorage.setItem("ChatApp", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        if (error.response) {
+          toast.error("Error: " + error.response.data.error);
+        }
+      });
+  };
   return (
     <>
       <div>
+        <ToastContainer />
         <div
           style={{
             display: "flex",
@@ -20,6 +51,7 @@ const Login = () => {
               width: "300px",
               gap: "12px",
             }}
+            onSubmit={handleSubmit(onSubmit)}
             className="border border-gray-300 px-6 py-3 rounded-md"
           >
             <h1 className="text-2xl text-center">Login your account</h1>
@@ -44,11 +76,16 @@ const Login = () => {
               </svg>
               <input
                 type="email"
-                placeholder="mail@site.com"
-                required
-                className="flex-1"
+                className="grow"
+                placeholder="Email"
+                {...register("email", { required: "true" })}
               />
             </label>
+            {errors.email && (
+              <span className="text-red-500 text-sm font-semibold">
+                This field is required
+              </span>
+            )}
             {/* Password Input */}
             <label className="input validator flex items-center gap-2">
               <svg
@@ -74,15 +111,16 @@ const Login = () => {
               </svg>
               <input
                 type="password"
-                required
+                className="grow"
                 placeholder="Password"
-                minLength="8"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                title="Must be more than 8 characters, including a number, lowercase, and uppercase letter"
-                className="flex-1"
+                {...register("password", { required: true })}
               />
             </label>
-            {/* Confirm Password Input */}
+            {errors.password && (
+              <span className="text-red-500 text-sm font-semibold">
+                This field is required
+              </span>
+            )}
 
             <button
               type="submit"

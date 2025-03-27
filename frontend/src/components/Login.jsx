@@ -3,14 +3,20 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
+
     formState: { errors },
   } = useForm();
+
+  const navigate = useNavigate();
+  const [authUser, setAuthUser] = useAuth(); // Use Auth Context
+
   const onSubmit = async (data) => {
     const userInfo = {
       email: data.email,
@@ -24,6 +30,8 @@ const Login = () => {
           toast.success("Login successful");
         }
         localStorage.setItem("ChatApp", JSON.stringify(response.data));
+        setAuthUser(response.data); // Set authUser after successful login
+        navigate("/"); // Redirect to home
       })
       .catch((error) => {
         if (error.response) {
@@ -131,9 +139,9 @@ const Login = () => {
             </button>
             <p>
               Don't have an account?{" "}
-              <a href="/singup" className="text-blue-500">
+              <Link to="/signup" className="text-blue-500">
                 signup
-              </a>
+              </Link>
             </p>
           </form>
         </div>

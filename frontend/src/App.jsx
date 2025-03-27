@@ -6,12 +6,12 @@ import Login from "./components/Login";
 function App() {
   return (
     <>
-      {/* <div className="flex h-screen">
+      <div className="flex h-screen">
         <Logout />
         <Left />
         <Right />
-      </div> */}
-      {/* <Signup /> */}
+      </div>
+      <Signup />
       <Login />
     </>
   );

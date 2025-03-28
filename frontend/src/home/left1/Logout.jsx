@@ -4,18 +4,18 @@ import { TbLogout2 } from "react-icons/tb";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
+// import { useAuth } from "../../context/AuthProvider";
 const Logout = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const [, setAuthUser] = useAuth();
+  // const [, setAuthUser] = useAuth();
   const handleLogout = async () => {
     try {
       const response = await axios.post("/api/user/logout");
       localStorage.removeItem("ChatApp");
       Cookies.remove("jwt");
-      setAuthUser(undefined);
+      // setAuthUser(undefined);
 
       if (response.data) {
         toast.success("Logout successful");

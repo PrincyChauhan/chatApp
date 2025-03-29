@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { ConnectDB } from "./config/db.js";
 import cookieParser from "cookie-parser";
+import path from "path";
 import userRoute from "./route/user.route.js";
 import messageRoute from "./route/message.route.js";
 import { server, app } from "./socketIO/server.js";
@@ -28,6 +29,16 @@ app.use("/api/message", messageRoute);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+// Code for Deployment
+
+if (process.env.NODE_ENV === "production") {
+  const dirPath = path.resolve();
+  app.use(express.static("./frontend/dist"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(dirPath, "./frontend/dist", "index.html"));
+  });
+}
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

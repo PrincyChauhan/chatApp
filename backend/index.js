@@ -5,8 +5,9 @@ import { ConnectDB } from "./config/db.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./route/user.route.js";
 import messageRoute from "./route/message.route.js";
+import { server, app } from "./socketIO/server.js";
 dotenv.config();
-const app = express();
+
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
@@ -28,6 +29,6 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

@@ -10,7 +10,7 @@ const useSendMessage = () => {
     try {
       const res = await axios.post(
         `/api/message/send/${selectedConversation._id}`,
-        { message }
+        { messages: message }
       );
       setMessage([...messages, res.data]);
       setLoading(false);

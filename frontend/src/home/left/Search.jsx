@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
+import userGetAllUsers from "../../context/userGetAllUsers.jsx";
+import useConversation from "../../statemanage/useConversation.js";
 const Search = () => {
+  const [search, setSearch] = useState("");
+  const [allUsers] = userGetAllUsers();
+  const { setSelectedConversation } = useConversation();
   return (
     <div className=" h-[10vh]">
       <div className="px-6 py-4">
@@ -11,6 +16,8 @@ const Search = () => {
                 type="text"
                 className="grow outline-none bg-transparent"
                 placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </label>
             <button>

@@ -1,11 +1,16 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
-import { getReceiverSocketId } from "../socketIO/server.js";
+import { getReceiverSocketId, io } from "../socketIO/server.js";
 
 export const sendMessage = async (req, res) => {
   try {
     const { messages } = req.body;
     console.log(messages, "----------------message");
+
+    if (!messages || messages.trim() === "") {
+      return res.status(400).json({ error: "Message cannot be empty" });
+    }
+
     const { id: receiverId } = req.params;
     console.log(receiverId, "----------------receiverId");
     const senderId = req.user._id; // current logged in user

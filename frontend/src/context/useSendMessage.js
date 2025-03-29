@@ -12,7 +12,11 @@ const useSendMessage = () => {
         `/api/message/send/${selectedConversation._id}`,
         { messages: message }
       );
-      setMessage([...messages, res.data]);
+      // setMessage([...messages, res.data.newMessage]);
+      setMessage([
+        ...(Array.isArray(messages) ? messages : []),
+        res.data.newMessage,
+      ]);
       setLoading(false);
     } catch (error) {
       console.log("Error in send messages", error);

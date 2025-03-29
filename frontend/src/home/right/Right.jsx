@@ -50,12 +50,10 @@ const NoChatSelected = () => {
         <div className="flex h-screen items-center justify-center">
           <h1 className="text-center">
             Welcome{" "}
-            <span className="font-semibold text-xl">
-              {authUser.user.name}
-            </span>
+            <span className="font-semibold text-xl">{authUser.user.name}</span>
             <br />
-            No chat selected, please start conversation by selecting anyone to
-            your contacts
+            No chat selected, Please start conversation by selecting anyone to
+            your contacts.
           </h1>
         </div>
       </div>

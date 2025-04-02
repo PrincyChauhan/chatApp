@@ -4,11 +4,15 @@ import Users from "./Users";
 
 const Left = () => {
   return (
-    <div className="w-[30%] border-white bg-black text-white">
-      <h1 className="font-bold text-3xl px-9 py-1">ChitChat</h1>
+    <div className="w-[30%] bg-black text-gray-300">
+      <h1 className="font-bold text-3xl p-2 px-11">ChitChat</h1>
       <Search />
-      <hr></hr>
-      <Users />
+      <div
+        className=" flex-1 overflow-y-auto"
+        style={{ minHeight: "calc(84vh - 10vh)" }}
+      >
+        <Users />
+      </div>
     </div>
   );
 };

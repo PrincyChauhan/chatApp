@@ -26,7 +26,7 @@ const Logout = () => {
     <>
       <ToastContainer />
       <div className="w-[4%] bg-slate-950 text-white flex flex-col justify-end">
-        <div className="p-3">
+        <div className="p-3 align-bottom">
           <button onClick={handleLogout} disabled={loading}>
             <TbLogout2 className="text-5xl p-2 hover:bg-gray-600 rounded-lg duration-300" />
             {loading && <p>Logging out...</p>}

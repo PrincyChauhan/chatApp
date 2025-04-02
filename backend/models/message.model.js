@@ -24,6 +24,9 @@ const messageSchema = new mongoose.Schema(
         },
       ],
     },
+    image: {
+      type: String, // Store image URL
+    },
     createdAt: { type: Date, default: Date.now },
   },
   {

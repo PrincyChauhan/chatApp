@@ -109,6 +109,7 @@ export const getMessage = async (req, res) => {
     if (!conversation) {
       return res.status(404).json({ error: "Conversation not found" });
     }
+
     const messages = conversation.messages;
     res.status(200).json({ messages });
   } catch (error) {

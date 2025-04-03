@@ -7,12 +7,13 @@ const useGetMessage = () => {
   const { messages, setMessage, selectedConversation } = useConversation();
 
   useEffect(() => {
+    if (!selectedConversation?._id) {
+      console.log("No conversation selected, skipping API call.");
+      setMessage([]);
+      return;
+    }
     const getMessages = async () => {
-      if (!selectedConversation?._id) {
-        console.log("No conversation selected, skipping API call.");
-        return;
-      }
-
+      setMessage([]);
       setLoading(true);
       console.log(
         `Fetching messages for conversation ID: ${selectedConversation._id}`
@@ -21,6 +22,10 @@ const useGetMessage = () => {
       try {
         const res = await axios.get(
           `/api/message/get/${selectedConversation._id}`
+        );
+        console.log(
+          "Response from getMessages----- res------------:",
+          res.data
         );
         if (res.data?.messages) {
           setMessage(res.data.messages);

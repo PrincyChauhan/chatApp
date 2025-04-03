@@ -51,50 +51,6 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-// export const sendMessage = async (req, res) => {
-//   try {
-//     const { messages } = req.body;
-//     console.log(messages, "----------------message");
-
-//     if (!messages || messages.trim() === "") {
-//       return res.status(400).json({ error: "Message cannot be empty" });
-//     }
-
-//     const { id: receiverId } = req.params;
-//     console.log(receiverId, "----------------receiverId");
-//     const senderId = req.user._id; // current logged in user
-
-//     console.log(senderId, "----------------senderId");
-//     let conversation = await Conversation.findOne({
-//       participants: { $all: [senderId, receiverId] },
-//     });
-//     if (!conversation) {
-//       conversation = await Conversation.create({
-//         participants: [senderId, receiverId],
-//       });
-//     }
-//     const newMessage = new Message({
-//       senderId,
-//       receiverId,
-//       messages,
-//     });
-//     if (newMessage) {
-//       conversation.messages.push(newMessage._id);
-//     }
-//     // await conversation.save()
-//     // await newMessage.save();
-//     await Promise.all([conversation.save(), newMessage.save()]); // run parallel
-//     const receiverSocketId = getReceiverSocketId(receiverId);
-//     if (receiverSocketId) {
-//       io.to(receiverSocketId).emit("newMessage", newMessage);
-//     }
-//     res.status(201).json({ newMessage, message: "Message sent successfully" });
-//   } catch (error) {
-//     console.log("Error in sendMessage", error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// };
-
 export const getMessage = async (req, res) => {
   try {
     const { id: chatUser } = req.params;
@@ -104,14 +60,14 @@ export const getMessage = async (req, res) => {
 
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, chatUser] },
-    }).populate("messages"); // populate messages field with Message documents
-
+    }).populate({
+      path: "messages",
+      options: { sort: { createdAt: 1 } }, // Sort messages in ascending order
+    });
     if (!conversation) {
       return res.status(404).json({ error: "Conversation not found" });
     }
-
-    const messages = conversation.messages;
-    res.status(200).json({ messages });
+    res.status(200).json({ messages: conversation.messages });
   } catch (error) {
     console.log("Message getting error", error);
     res.status(500).json({ error: "Internal server error" });
